@@ -177,7 +177,7 @@ app.post('/api/policy/setup', async (req, res) => {
 // API 2: Generate Provisioning Token & QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'hkes-demo-token-99887766';
+  let token = 'HKESMDM2026';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
