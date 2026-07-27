@@ -57,14 +57,14 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung)
+// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung + Sound Policy)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
     name: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
     applications: [
       {
-        packageName: 'edu.hkes.complaints', // BTGH Complaints App
+        packageName: 'edu.hkes.complaints', // BTGH Directory App
         installType: 'REQUIRED_FOR_SETUP',
         defaultPermissionPolicy: 'GRANT'
       },
@@ -102,7 +102,8 @@ function buildHkesKioskPolicy() {
       statusBar: 'NOTIFICATIONS_DISABLED', // Prevent pull-down notification panel
       deviceSettings: 'SETTINGS_DISABLED'    // Block access to System Settings
     },
-    // Security & Hardware Restrictions
+    // Security, Sound & Hardware Restrictions
+    volumeMuteDisabled: true, // Block muting ringtone / volume
     keyguardDisabled: false,
     statusBarDisabled: true,
     factoryResetDisabled: true, // Block Factory Reset
