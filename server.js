@@ -56,13 +56,12 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Policy Definition
+// 1. Get HKES Policy Definition (Normal Setup Profile - No Kiosk Locks)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
     cameraDisabled: false,
     factoryResetDisabled: true,
-    uninstallAppsDisabled: true,
     defaultPermissionPolicy: 'GRANT'
   };
 }
@@ -78,7 +77,7 @@ async function syncPolicyToEnterprise() {
       name: policyName,
       requestBody: buildHkesKioskPolicy(),
     });
-    console.log('✅ Clean Policy auto-synced to Enterprise:', ENTERPRISE_NAME);
+    console.log('✅ Normal Managed Profile synced to Enterprise:', ENTERPRISE_NAME);
   } catch (err) {
     console.error('Error syncing policy:', err.message);
   }
@@ -109,7 +108,7 @@ app.post('/api/token/generate', async (req, res) => {
     }
   }
 
-  // Pure Android Enterprise Spec for Google Device Policy
+  // Pure Android Enterprise Spec for Google Device Policy (Normal Unlocked Managed Profile)
   const googlePayload = JSON.stringify({
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
