@@ -9,7 +9,24 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// Serve static files from both /public subfolder AND root directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
+
+// Explicit route for Root '/'
+app.get('/', (req, res) => {
+  const rootIndexPath = path.join(__dirname, 'index.html');
+  const publicIndexPath = path.join(__dirname, 'public', 'index.html');
+
+  if (fs.existsSync(rootIndexPath)) {
+    return res.sendFile(rootIndexPath);
+  } else if (fs.existsSync(publicIndexPath)) {
+    return res.sendFile(publicIndexPath);
+  } else {
+    return res.send('HKES MDM Server is running!');
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 const ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || ''; // Format: enterprises/LCxxxxxxxx
@@ -209,6 +226,5 @@ app.post('/api/device/command', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`====================================================`);
   console.log(`  HKES Institute MDM Dashboard running on port ${PORT}`);
-  console.log(`  URL: http://localhost:${PORT}`);
   console.log(`====================================================`);
 });
