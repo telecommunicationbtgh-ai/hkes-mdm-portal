@@ -148,10 +148,10 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Generate Provisioning Token & QR Code (Direct HKES Kiosk Provisioning)
+// API 2: Universal Android Provisioning QR Code Generator
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'HKES2026DIRECT';
+  let token = 'HKES2026SETUP';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
@@ -164,22 +164,20 @@ app.post('/api/token/generate', async (req, res) => {
       });
       token = tokenResponse.data.value;
     } catch (err) {
-      console.warn('Using Direct HKES Provisioning Token:', err.message);
+      console.warn('Using HKES Universal Provisioning Token:', err.message);
     }
   }
 
-  // Direct Android Kiosk DPC Enrollment Payload
+  // Universal Android Enterprise DPC Payload (No Checksum Error)
   const qrPayload = JSON.stringify({
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.hmdm.launcher/.AdminReceiver",
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://hmdm.com/apk/hmdm-headwind-mdm-latest.apk",
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "68:B6:3B:56:4C:E6:C9:F4:7D:66:9F:80:61:9F:D9:D2:12:F7:55:BC:07:95:5D:CD:82:1D:64:1B:32:0C:6D:64",
-    "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
-      "com.hmdm.SERVER_HOST": "hkes-mdm-portal.onrender.com",
-      "com.hmdm.CUSTOMER_TITLE": "HKES Institute",
-      "account": DEFAULT_MANAGED_ACCOUNT
-    },
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
     "android.app.extra.PROVISIONING_SKIP_ENCRYPTION": true,
-    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true
+    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
+    "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
+      "com.google.android.apps.work.clouddpc.EXTRA_PROVISIONING_TOKEN": token,
+      "account": DEFAULT_MANAGED_ACCOUNT
+    }
   });
 
   try {
@@ -188,7 +186,7 @@ app.post('/api/token/generate', async (req, res) => {
     res.json({
       success: true,
       token: token,
-      enterpriseName: ENTERPRISE_NAME || 'HKES Institute Direct Kiosk',
+      enterpriseName: ENTERPRISE_NAME || 'HKES Institute Universal Kiosk',
       expirationTimestamp: "Never (Permanent)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
@@ -200,7 +198,7 @@ app.post('/api/token/generate', async (req, res) => {
 });
 
 // -------------------------------------------------------------
-// API 3: List Enrolled HKES Devices (No Demo Devices)
+// API 3: List Enrolled HKES Devices
 // -------------------------------------------------------------
 app.get('/api/devices', async (req, res) => {
   if (!androidManagement || !ENTERPRISE_NAME) {
