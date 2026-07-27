@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HKES Institute - Mobile Device Management (MDM)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-icon">HKES</div>
+      <div class="brand-text">
+        <h1>HKES Institute MDM</h1>
+        <span class="sub-text">In-House Android Device Management System</span>
+      </div>
+    </div>
+    <div class="nav-right">
+      <span class="status-badge live"><span class="pulse"></span> System Operational</span>
+      <button class="btn btn-primary" id="btn-new-qr">+ Enroll New Device</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- KPI / Overview Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Total Registered Devices</div>
+        <div class="kpi-value" id="kpi-total">40</div>
+        <div class="kpi-foot">Target Fleet Capacity</div>
+      </div>
+      <div class="kpi-card highlight">
+        <div class="kpi-title">Active Policy</div>
+        <div class="kpi-value text-accent">Strict Kiosk</div>
+        <div class="kpi-foot">Phone + WhatsApp Only</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Security Restrictions</div>
+        <div class="kpi-value text-success">Active</div>
+        <div class="kpi-foot">Settings & Reset Disabled</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">SIM & Network Monitoring</div>
+        <div class="kpi-value text-info">Enabled</div>
+        <div class="kpi-foot">Instant Alert Logging</div>
+      </div>
+    </section>
+
+    <!-- Main Content Split -->
+    <div class="content-grid">
+      
+      <!-- Device Table Section -->
+      <section class="panel main-panel">
+        <div class="panel-header">
+          <h2>Enrolled Devices</h2>
+          <div class="panel-actions">
+            <button class="btn btn-secondary" id="btn-refresh-devices">🔄 Refresh List</button>
+            <button class="btn btn-secondary" id="btn-update-policy">⚡ Sync Kiosk Policy</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Device ID / Name</th>
+                <th>Model</th>
+                <th>Status</th>
+                <th>Active Profile</th>
+                <th>Last Check-In</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="device-table-body">
+              <tr>
+                <td colspan="6" class="loading-cell">Loading enrolled devices...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Policy Info & Enrollment Section -->
+      <aside class="panel side-panel">
+        <div class="panel-header">
+          <h2>Kiosk Profile Summary</h2>
+        </div>
+
+        <div class="policy-details">
+          <div class="app-chip-group">
+            <span class="chip chip-phone">📞 Phone Dialer (Allowed)</span>
+            <span class="chip chip-wa">💬 WhatsApp (Allowed)</span>
+          </div>
+
+          <ul class="restriction-list">
+            <li>🔒 <strong>System Settings:</strong> Blocked</li>
+            <li>🔒 <strong>Factory Reset:</strong> Blocked</li>
+            <li>🔒 <strong>Status Bar Notifications:</strong> Disabled</li>
+            <li>🔒 <strong>App Sideloading:</strong> Blocked</li>
+            <li>🔒 <strong>USB Data Copying:</strong> Blocked</li>
+          </ul>
+        </div>
+
+        <div class="qr-box-container" id="qr-section">
+          <h3>Enrollment QR Code</h3>
+          <p class="qr-desc">Tap welcome screen 6 times on a factory-reset device & scan below:</p>
+          <div class="qr-frame" id="qr-frame">
+            <div class="qr-placeholder">Click <strong>"Enroll New Device"</strong> above to generate QR code</div>
+          </div>
+          <div class="qr-token-info" id="qr-token-info"></div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Modal for Confirmation -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-card">
+      <h3 id="modal-title">Action Confirmation</h3>
+      <p id="modal-desc">Are you sure you want to perform this action on the target device?</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn btn-danger" id="modal-confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
