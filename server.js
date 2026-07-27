@@ -30,6 +30,7 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 const ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || ''; // Format: enterprises/LCxxxxxxxx
+const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
 
 // Initialize Google Auth Client
 let androidManagement;
@@ -176,7 +177,8 @@ app.post('/api/token/generate', async (req, res) => {
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
     "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
-      "com.google.android.apps.work.clouddpc.EXTRA_PROVISIONING_TOKEN": token
+      "com.google.android.apps.work.clouddpc.EXTRA_PROVISIONING_TOKEN": token,
+      "account": DEFAULT_MANAGED_ACCOUNT
     }
   });
 
@@ -188,7 +190,8 @@ app.post('/api/token/generate', async (req, res) => {
       success: true,
       token: token,
       expirationTimestamp: "30 Days",
-      qrCodeDataUrl: qrCodeDataUrl
+      qrCodeDataUrl: qrCodeDataUrl,
+      managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
   } catch (error) {
     console.error('Error generating token:', error);
