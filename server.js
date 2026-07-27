@@ -87,39 +87,11 @@ async function syncPolicyToEnterprise() {
 syncPolicyToEnterprise();
 
 // -------------------------------------------------------------
-// API 2: Generate Enrollment QR Code (Supports both Direct DPC & Google Cloud)
+// API 2: Generate Official Google Cloud Enrollment Token & QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  const { mode } = req.body || {}; // mode: 'direct' or 'google'
-  let token = 'MADBYFEZQJXANCVBRPMN';
+  let token = 'KUQWOBQKYZEDJGCKPWTU';
 
-  if (mode === 'direct') {
-    // Direct Samsung Kiosk DPC Payload with Verified SHA-256 Checksum for Android 14 / One UI 6
-    const directPayload = JSON.stringify({
-      "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.hmdm.launcher/.AdminReceiver",
-      "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://hmdm.com/apk/hmdm-headwind-mdm-latest.apk",
-      "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "bcnH_JO7SIuwUgpseAqNPA-1SGpHEaykm0xT-sc5MCM",
-      "android.app.extra.PROVISIONING_SKIP_ENCRYPTION": true,
-      "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
-      "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
-        "com.hmdm.SERVER_HOST": "hkes-mdm-portal.onrender.com",
-        "com.hmdm.CUSTOMER_TITLE": "HKES Institute"
-      }
-    });
-
-    const qrCodeDataUrl = await QRCode.toDataURL(directPayload, { margin: 2, width: 350 });
-    return res.json({
-      success: true,
-      token: 'DIRECT_KIOSK',
-      mode: 'Direct Device Owner Kiosk',
-      enterpriseName: 'HKES Institute Direct Kiosk',
-      expirationTimestamp: "Never (Permanent)",
-      qrCodeDataUrl: qrCodeDataUrl,
-      managedAccount: DEFAULT_MANAGED_ACCOUNT
-    });
-  }
-
-  // Default: Google Cloud AMAPI Token
   if (androidManagement && ENTERPRISE_NAME) {
     try {
       await syncPolicyToEnterprise();
@@ -137,16 +109,15 @@ app.post('/api/token/generate', async (req, res) => {
     }
   }
 
+  // Pure Android Enterprise Spec for Google Device Policy
   const googlePayload = JSON.stringify({
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
-    "android.app.extra.PROVISIONING_SKIP_ENCRYPTION": true,
-    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
     "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
-      "com.google.android.apps.work.clouddpc.EXTRA_ENROLLMENT_TOKEN": token,
-      "com.google.android.apps.work.clouddpc.EXTRA_PROVISIONING_TOKEN": token
-    }
+      "com.google.android.apps.work.clouddpc.EXTRA_ENROLLMENT_TOKEN": token
+    },
+    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true
   });
 
   try {
@@ -155,7 +126,6 @@ app.post('/api/token/generate', async (req, res) => {
     res.json({
       success: true,
       token: token,
-      mode: 'Google Cloud AMAPI',
       enterpriseName: ENTERPRISE_NAME,
       expirationTimestamp: "30 Days",
       qrCodeDataUrl: qrCodeDataUrl,
