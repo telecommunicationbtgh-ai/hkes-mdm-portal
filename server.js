@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || ''; // Format: enterprises/LCxxxxxxxx
+let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || ''; 
 const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
 
 // Initialize Google Auth Client
@@ -58,7 +58,7 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Camera Enabled + Uninstall Blocked)
+// 1. Get HKES Kiosk Policy Definition
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
@@ -150,6 +150,65 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
+// API: Enterprise Signup URL Generation
+// -------------------------------------------------------------
+app.get('/api/enterprise/signup-url', async (req, res) => {
+  if (!androidManagement) {
+    return res.status(400).json({ error: 'Service account key not loaded' });
+  }
+
+  try {
+    const signupUrl = await androidManagement.signupUrls.create({
+      callbackUrl: 'https://hkes-mdm-portal.onrender.com/api/enterprise/callback'
+    });
+    res.json({ success: true, url: signupUrl.data.url });
+  } catch (error) {
+    console.error('Error creating signup URL:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Callback from Google Managed Play registration
+app.get('/api/enterprise/callback', async (req, res) => {
+  const { enterpriseToken } = req.query;
+  if (!enterpriseToken) {
+    return res.status(400).send('Enterprise token missing from callback');
+  }
+
+  try {
+    const response = await androidManagement.enterprises.create({
+      enterpriseToken: enterpriseToken,
+      requestBody: {
+        enterpriseDisplayName: 'HKES Institute'
+      }
+    });
+
+    ENTERPRISE_NAME = response.data.name; // Format: enterprises/LCxxxxxxxx
+    console.log('Enterprise Created Successfully:', ENTERPRISE_NAME);
+
+    // Apply Policy immediately
+    const policyName = `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`;
+    await androidManagement.enterprises.policies.patch({
+      name: policyName,
+      requestBody: buildHkesKioskPolicy(),
+    });
+
+    res.send(`
+      <html>
+        <body style="font-family: sans-serif; text-align: center; padding: 3rem; background: #0f172a; color: white;">
+          <h2>✅ HKES Enterprise Successfully Registered!</h2>
+          <p>Enterprise Name: <strong>${ENTERPRISE_NAME}</strong></p>
+          <a href="/" style="background: #3b82f6; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px;">Return to MDM Dashboard</a>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('Error creating enterprise:', error);
+    res.status(500).send('Error creating enterprise: ' + error.message);
+  }
+});
+
+// -------------------------------------------------------------
 // API 1: Create or Update HKES Kiosk Policy
 // -------------------------------------------------------------
 app.post('/api/policy/setup', async (req, res) => {
@@ -177,7 +236,7 @@ app.post('/api/policy/setup', async (req, res) => {
 // API 2: Generate Provisioning Token & QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'HKESMDM2026';
+  let token = 'hkes-sample-token-123456';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
@@ -212,6 +271,7 @@ app.post('/api/token/generate', async (req, res) => {
     res.json({
       success: true,
       token: token,
+      enterpriseName: ENTERPRISE_NAME,
       expirationTimestamp: "30 Days",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
@@ -227,7 +287,6 @@ app.post('/api/token/generate', async (req, res) => {
 // -------------------------------------------------------------
 app.get('/api/devices', async (req, res) => {
   if (!androidManagement || !ENTERPRISE_NAME) {
-    // Demo Mock Data if not connected to live Google cloud yet
     return res.json({
       isDemo: true,
       devices: [
@@ -256,7 +315,7 @@ app.get('/api/devices', async (req, res) => {
 // API 4: Issue Remote Wipe / Lock Command
 // -------------------------------------------------------------
 app.post('/api/device/command', async (req, res) => {
-  const { deviceName, action } = req.body; // action: LOCK, REBOOT, WIPE
+  const { deviceName, action } = req.body;
 
   if (!androidManagement || !ENTERPRISE_NAME) {
     return res.json({ success: true, message: `[DEMO] Command ${action} sent to ${deviceName}` });
@@ -266,7 +325,7 @@ app.post('/api/device/command', async (req, res) => {
     const response = await androidManagement.enterprises.devices.issueCommand({
       name: deviceName,
       requestBody: {
-        type: action // e.g. LOCK, REBOOT, WIPE
+        type: action
       }
     });
 
