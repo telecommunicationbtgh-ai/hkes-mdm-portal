@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Generate Enrollment QR Code
   // -----------------------------------------------------------
   async function generateQrCode() {
-    qrFrame.innerHTML = `<div class="qr-placeholder">Generating token & QR Code...</div>`;
+    qrFrame.innerHTML = `<div class="qr-placeholder">Generating permanent QR Code...</div>`;
     qrTokenInfo.textContent = '';
 
     try {
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (data.success) {
         qrFrame.innerHTML = `<img src="${data.qrCodeDataUrl}" alt="HKES Enrollment QR Code" />`;
-        qrTokenInfo.innerHTML = `<strong>Token Expiry:</strong> 30 Days<br><small>Ready to scan on 40 phones</small>`;
+        qrTokenInfo.innerHTML = `<strong>Device Policy Expiry:</strong> NEVER (Permanent)<br><small>Permanent Kiosk Lockdown for HKES Devices</small>`;
       } else {
         qrFrame.innerHTML = `<div class="qr-placeholder text-danger">Error: ${data.error}</div>`;
       }
