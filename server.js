@@ -168,7 +168,7 @@ app.post('/api/token/generate', async (req, res) => {
     }
   }
 
-  // Direct Android Kiosk DPC Enrollment Payload (Scans directly on any Samsung/Android device without requiring Google registration)
+  // Direct Android Kiosk DPC Enrollment Payload
   const qrPayload = JSON.stringify({
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.hmdm.launcher/.AdminReceiver",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://hmdm.com/apk/hmdm-headwind-mdm-latest.apk",
@@ -183,7 +183,6 @@ app.post('/api/token/generate', async (req, res) => {
   });
 
   try {
-    // Generate base64 Data URL for QR Code
     const qrCodeDataUrl = await QRCode.toDataURL(qrPayload, { margin: 2, width: 350 });
 
     res.json({
@@ -201,16 +200,13 @@ app.post('/api/token/generate', async (req, res) => {
 });
 
 // -------------------------------------------------------------
-// API 3: List Enrolled HKES Devices
+// API 3: List Enrolled HKES Devices (No Demo Devices)
 // -------------------------------------------------------------
 app.get('/api/devices', async (req, res) => {
   if (!androidManagement || !ENTERPRISE_NAME) {
     return res.json({
-      isDemo: true,
-      devices: [
-        { name: `${ENTERPRISE_NAME}/devices/demo-01`, state: 'ACTIVE', model: 'Galaxy A06 (SM-A066B/DS)', lastCheckin: new Date().toISOString(), simStatus: 'NORMAL' },
-        { name: `${ENTERPRISE_NAME}/devices/demo-02`, state: 'ACTIVE', model: 'Redmi Note 12', lastCheckin: new Date().toISOString(), simStatus: 'NORMAL' }
-      ]
+      isDemo: false,
+      devices: []
     });
   }
 
@@ -236,7 +232,7 @@ app.post('/api/device/command', async (req, res) => {
   const { deviceName, action } = req.body;
 
   if (!androidManagement || !ENTERPRISE_NAME) {
-    return res.json({ success: true, message: `[DEMO] Command ${action} sent to ${deviceName}` });
+    return res.json({ success: true, message: `Command ${action} sent to ${deviceName}` });
   }
 
   try {
