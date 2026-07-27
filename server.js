@@ -31,12 +31,22 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || ''; 
 const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
+const PROJECT_ID = 'btghcomplaints';
 
 // Initialize Google Auth Client
 let androidManagement;
 
 function getAuthClient() {
   try {
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+      const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+      const auth = new google.auth.GoogleAuth({
+        credentials,
+        scopes: ['https://www.googleapis.com/auth/androidmanagement'],
+      });
+      return google.androidmanagement({ version: 'v1', auth });
+    }
+
     let keyFile = path.join(__dirname, 'service-account-key.json');
     if (!fs.existsSync(keyFile)) {
       const altKeyFile = path.join(__dirname, 'service-account-key.json.json');
@@ -50,7 +60,7 @@ function getAuthClient() {
     });
     return google.androidmanagement({ version: 'v1', auth });
   } catch (error) {
-    console.error('Warning: service-account-key.json not found yet.', error.message);
+    console.error('Warning: service-account-key not loaded.', error.message);
     return null;
   }
 }
@@ -58,14 +68,14 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Gboard Keyboard)
+// 1. Get HKES Kiosk Policy Definition
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
     name: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
     applications: [
       {
-        packageName: 'com.google.android.inputmethod.latin', // Google Gboard Keyboard (Default Keyboard)
+        packageName: 'com.google.android.inputmethod.latin', // Google Gboard Keyboard
         installType: 'REQUIRED_FOR_SETUP',
         defaultPermissionPolicy: 'GRANT'
       },
@@ -153,7 +163,67 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Universal Android Provisioning QR Code Generator
+// API: Enterprise Signup URL Generation
+// -------------------------------------------------------------
+app.get('/api/enterprise/signup-url', async (req, res) => {
+  if (!androidManagement) {
+    return res.status(400).json({ error: 'Service account key not loaded' });
+  }
+
+  try {
+    const signupUrl = await androidManagement.signupUrls.create({
+      projectId: PROJECT_ID,
+      callbackUrl: 'https://hkes-mdm-portal.onrender.com/api/enterprise/callback'
+    });
+    res.json({ success: true, url: signupUrl.data.url });
+  } catch (error) {
+    console.error('Error creating signup URL:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Callback from Google Managed Play registration
+app.get('/api/enterprise/callback', async (req, res) => {
+  const { enterpriseToken } = req.query;
+  if (!enterpriseToken) {
+    return res.status(400).send('Enterprise token missing from callback');
+  }
+
+  try {
+    const response = await androidManagement.enterprises.create({
+      enterpriseToken: enterpriseToken,
+      requestBody: {
+        enterpriseDisplayName: 'HKES Institute'
+      }
+    });
+
+    ENTERPRISE_NAME = response.data.name; // Format: enterprises/LCxxxxxxxx
+    console.log('Enterprise Created Successfully:', ENTERPRISE_NAME);
+
+    // Apply Policy immediately
+    const policyName = `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`;
+    await androidManagement.enterprises.policies.patch({
+      name: policyName,
+      requestBody: buildHkesKioskPolicy(),
+    });
+
+    res.send(`
+      <html>
+        <body style="font-family: sans-serif; text-align: center; padding: 3rem; background: #0f172a; color: white;">
+          <h2>✅ HKES Enterprise Successfully Registered!</h2>
+          <p>Enterprise Name: <strong>${ENTERPRISE_NAME}</strong></p>
+          <a href="/" style="background: #3b82f6; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px;">Return to MDM Dashboard</a>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('Error creating enterprise:', error);
+    res.status(500).send('Error creating enterprise: ' + error.message);
+  }
+});
+
+// -------------------------------------------------------------
+// API 2: Generate Provisioning Token & QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
   let token = 'HKES2026SETUP';
@@ -169,11 +239,10 @@ app.post('/api/token/generate', async (req, res) => {
       });
       token = tokenResponse.data.value;
     } catch (err) {
-      console.warn('Using HKES Universal Provisioning Token:', err.message);
+      console.warn('Using HKES Provisioning Token:', err.message);
     }
   }
 
-  // Universal Android Enterprise DPC Payload
   const qrPayload = JSON.stringify({
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
@@ -191,7 +260,7 @@ app.post('/api/token/generate', async (req, res) => {
     res.json({
       success: true,
       token: token,
-      enterpriseName: ENTERPRISE_NAME || 'HKES Institute Universal Kiosk',
+      enterpriseName: ENTERPRISE_NAME || 'HKES Institute Kiosk',
       expirationTimestamp: "Never (Permanent)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
