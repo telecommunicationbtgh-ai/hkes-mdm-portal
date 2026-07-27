@@ -192,7 +192,11 @@
 
         <div class="qr-box-container" id="qr-section">
           <h3>Enrollment QR Code</h3>
-          <p class="qr-desc">Tap welcome screen 6 times on a factory-reset device & scan below:</p>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem; justify-content: center;">
+            <button class="btn btn-sm btn-primary" id="btn-qr-direct">⚡ Direct Samsung Kiosk QR</button>
+            <button class="btn btn-sm btn-secondary" id="btn-qr-google">🌐 Google Cloud QR</button>
+          </div>
+          <p class="qr-desc" id="qr-desc-text">Tap welcome screen 6 times on a factory-reset device & scan below:</p>
           <div class="qr-frame" id="qr-frame">
             <div class="qr-placeholder">Click <strong>"Enroll New Device"</strong> above to generate QR code</div>
           </div>
