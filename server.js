@@ -34,7 +34,7 @@ const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
 const PROJECT_ID = 'btghcomplaints';
 
 // Base64 Encoded Service Account Credentials for Production Deployments
-const B64_KEY = "ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiYnRnaGNvbXBsYWludHMiLAogICJwcml2YXRlX2tleV9pZCI6ICJiNDFmZWY3ZTdmYzdmNGU4MTMxZjAwYjAxZGI2MDkxZjVhYTAwNzZjIiwKICAicHJpdmF0ZV9rZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdmdJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLZ3dnZ1NrQWdFQUFvSUJBUUMvVEVoUzl5dWdLUlcxXG4wdlQ4aXVnVG9kYmZIKzRKejJnQW9qeGI2a1QwTnF6RFF3ck1SbFkzV0UxL2pwbWFPUGxkbVNPYVJYR0gxbTVmXG4zT2lFeHEvSFU1elp2RTRLRHBTNXlNendHRThybDU1K2RqaDdOdlNkTTl1SDlTd1grbXpQN2pqbG5CaDFZK0VXXG54TkRxZ3dEelVGVm1URUpmODNYQWs5Q2N2VzQ2SWJRS0xreHBMSkc0VWRQTzB6RDdtL2lJemRoMFlnMzFkajM5XG5SMXYvRytuMHE5Qks1TFl0dGFDekV0ZU5PTnpBbmk4MmtpS1dwU21TTmkyR25MQ3V5dmlJaWNUbFpVNEM1TmZhXG5wMzVsVUFVZUJRWSszTmxkczU3SjNzcU9XeGo5eHFyY0VQemI2VWtYWW8xNmgrV2JsckVrckN2Ry9tVWVRQ21wXG5ObjF3VG9MakFnTUJBQUVDZ2dFQUdqRUtrZmx2aXEwMVlNQ3lkRVZjZ3h1Y2ZNNDFYRnVMWk5MUnF0QUhndHhkXG5pUnFMeHU0MmJidDBXT3VnVWtKTXVpajJlKy9ZSEg0YWZKdVZabUNCdnF2UEJPeklOtHhpZ0pKaXFVZHBYbE1PSjNaTklhYi9PVWpHL0lPaFZPbTdwUEFzMkNOK25kUUJIbndKK2tVQ3dnTVpyWEdsXG5TSHRzNUljZGZ6QVlCNnJ2U3FlSTJWNitlWXJ2cE1WV2lyMWFEdkpuMXJVNzZqakJYanEyYTlQWS9TNDUrRXJrXG5zbTNWMkxLMUI0SnF4NE9vT2M4UFdJNTV3a3lnb0s3S1FOTWJTNCsraVFTdTl4QkV5cVJvREpDRlVMdUtFWnFWXG5pRURJL1ZReVBpRW5LMnhPMWcrc01OL0pZTmIxaFNjb0xDakw2S1krT1FLQmdRRGVTT3pvbHpWK0xHNlFnSzZmXG5qV0U1N0dRMEpDOEpwaGNlNHlURzdyelgybUNVU3pQSlZPUVBrMjhnQVJUakZrSjE1UFkyNUpWTHFrMy9QNUtxXG4zaUxPWFdHdUNNMjRGMVo1SFB1OW44ckJTaEZlK21KZE1iaTZlNTdkNHA4ZkduZGlDMS9yTVZYbXFmQnIwejBqXG54cnhUdFpqRDdhTlBpVDdCTlhPVkJFRUl4d0tCZ1FEY1VDdXlSM09iOStvRXNFbUVBVEZRdDB5d003NDg4MVdPXG5GT3JJaGd0bDh3R0dCVzlmOTFDZkFKZFhGaW1tQUNicVJHSnN3QTN2UHZmSFNUazRBNzc3L1VrUG54bFFVNWZmXG5alh5OXlJWGY4RGUwcHZCVk1XNGUvN2hJektWSlBCTjExU0N1a01PWG1ZeWh0NUhVQjNqYklJODFoOU51ZGpVXG5Pc21xNWdyeEJRS0JnUUM5R1pyNWo5R0JJamw1RXcvN1NpSWhUYm85SlY4aXZUcEVHNFpvK2lhTEZ3czhmUEYwXG5ZSlNYcjV4RXhNYkpIV0d5dS9LOTVoNGdQYVNXOWJWSFNTeWhGSTRKcVJHaGY3RWYzWWxIMncxNC9CTGxFdXJsXG5UMnhRc09RSTdVWUpQZEc4QmVNMnlVVERzMlNGeGpIb0lxU0tMaDNrNkdBYlJLMnZYbEtTdmdpNWR3S0JnUUNMXG5yaXkySUlVVTJ1NjlRRU9yOU5HZWVraWQ0b0IzeGxOMC9LQUt1S25iWG1HVjVqWkI0dHh6b3YxUTBwVmZVUE5iXG5UallVK3dNYXI1S0xBRXJOejlvemk5ZlpscWFHL2lqcENaQzAxYWtBdXhlK2Jrc2dIUzRxbERyNTVNWDZOMncvXG4vZ2p2eFVZa2d3ZEtlNlhNRXVpUU8waXJaNXA3UGh4U0dsK29BYWZvUFFLQmdFcUNVLzBxMHZ5UDF3K0MwcGpEXG5qaVVTeWgrQTI0TVpHdnVMUmp4V2dEWmdIWWZYRHFlWVhZYXcxZ1ZUOFBWbys2Si9sYktxT2JvTHlLUWxiTjkzXG5iVjlMN2xOc2Jqd1hlZU14RzRoV2o3dFg4djZ0RmpVMkVOUFdSQkZzVnZpcnpveDZYZmVISTZMVWVZdWpLM01EXG5sKzdqMVowaXQzVit0NXFlcVlvUjVYTHpcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJoa2VzLW1kbS1hZG1pbkBidGdoY29tcGxhaW50cy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgImNsaWVudF9pZCI6ICIxMTA0MzQwNjQyMzUzNTcxNTU3MjEiLAogICJhdXRoX3VyaSI6ICJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvYXV0aCIsCiAgInRva2VuX3VyaSI6ICJodHRwczovL29hdXRoMi5nb29nbGVhcGlzLmNvbS90b2tlbiIsCiAgImF1dGhfcHJvdmlkZXJfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9vYXV0aDIvdjEvY2VydHMiLAogICJjbGllbnRfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9yb2JvdC92MS9tZXRhZGF0YS94NTA5L2hrZXMtbWRtLWFkbWluJTQwYnRnaGNvbXBsYWludHMuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJ1bml2ZXJzZV9kb21haW4iOiAiZ29vZ2xlYXBpcy5jb20iCn0K";
+const B64_KEY = "ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiYnRnaGNvbXBsYWludHMiLAogICJwcml2YXRlX2tleV9pZCI6ICJiNDFmZWY3ZTdmYzdmNGU4MTMxZjAwYjAxZGI2MDkxZjVhYTAwNzZjIiwKICAicHJpdmF0ZV9rZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdmdJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLZ3dnZ1NrQWdFQUFvSUJBUUMvVEVoUzl5dWdLUlcxXG4wdlQ4aXVnVG9kYmZIKzRKejJnQW9qeGI2a1QwTnF6RFF3ck1SbFkzV0UxL2pwbWFPUGxkbVNPYVJYR0gxbTVmXG4zT2lFeHEvSFU1elp2RTRLRHBTNXlNendHRThybDU1K2RqaDdOdlNkTTl1SDlTd1grbXpQN2pqbG5CaDFZK0VXXG54TkRxZ3dEelVGVm1URUpmODNYQWs5Q2N2VzQ2SWJRS0xreHBMSkc0VWRQTzB6RDdtL2lJemRoMFlnMzFkajM5XG5SMXYvRytuMHE5Qks1TFl0dGFDekV0ZU5PTnpBbmk4MmtpS1dwU21TTmkyR25MQ3V5dmlJaWNUbFpVNEM1TmZhXG5wMzVsVUFVZUJRWSszTmxkczU3SjNzcU9XeGo5eHFyY0VQemI2VWtYWW8xNmgrV2JsckVrckN2Ry9tVWVRQ21wXG5ObjF3VG9MakFnTUJBQUVDZ2dFQUdqRUtrZmx2aXEwMVlNQ3lkRVZjZ3h1Y2ZNNDFYRnVMWk5MUnF0QUhndHhkXG5pUnFMeHU0MmJidDBXT3VnVWtKTXVpajJlKy9ZSEg0YWZKdVZabUNCdnF2UEJPeklUbzR5aE1GZWRkME9NZXkvXG5jWmNrSXBLaXFVZHBYbE1PSjNaTklhYi9PVWpHL0lPaFZPbTdwUEFzMkNOK25kUUJIbndKK2tVQ3dnTVpyWEdsXG5TSHRzNUljZGZ6QVlCNnJ2U3FlSTJWNitlWXJ2cE1WV2lyMWFEdkpuMXJVNzZqakJYanEyYTlQWS9TNDUrRXJrXG5zbTNWMkxLMUI0SnF4NE9vT2M4UFdJNTV3a3lnb0s3S1FOTWJTNCsraVFTdTl4QkV5cVJvREpDRlVMdUtFWnFWXG5pRURJL1ZReVBpRW5LMnhPMWcrc01OL0pZTmIxaFNjb0xDakw2S1krT1FLQmdRRGVTT3pvbHpWK0xHNlFnSzZmXG5qV0U1N0dRMEpDOEpwaGNlNHlURzdyelgybUNVU3pQSlZPUVBrMjhnQVJUakZrSjE1UFkyNUpWTHFrMy9QNUtxXG4zaUxPWFdHdUNNMjRGMVo1SFB1OW44ckJTaEZlK21KZE1iaTZlNTdkNHA4ZkduZGlDMS9yTVZYbXFmQnIwejBqXG54cnhUdFpqRDdhTlBpVDdCTlhPVkJFRUl4d0tCZ1FEY1VDdXlSM09iOStvRXNFbUVBVEZRdDB5d003NDg4MVdPXG5GT3JJaGd0bDh3R0dCVzlmOTFDZkFKZFhGaW1tQUNicVJHSnN3QTN2UHZmSFNUazRBNzc3L1VrUG54bFFVNWZmXG5alh5OXlJWGY4RGUwcHZCVk1XNGUvN2hJektWSlBCTjExU0N1a01PWG1ZeWh0NUhVQjNqYklJODFoOU51ZGpVXG5Pc21xNWdyeEJRS0JnUUM5R1pyNWo5R0JJamw1RXcvN1NpSWhUYm85SlY4aXZUcEVHNFpvK2lhTEZ3czhmUEYwXG5ZSlNYcjV4RXhNYkpIV0d5dS9LOTVoNGdQYVNXOWJWSFNTeWhGSTRKcVJHaGY3RWYzWWxIMncxNC9CTGxFdXJsXG5UMnhRc09RSTdVWUpQZEc4QmVNMnlVVERzMlNGeGpIb0lxU0tMaDNrNkdBYlJLMnZYbEtTdmdpNWR3S0JnUUNMXG5yaXkySUlVVTJ1NjlRRU9yOU5HZWVraWQ0b0IzeGxOMC9LQUt1S25iWG1HVjVqWkI0dHh6b3YxUTBwVmZVUE5iXG5UallVK3dNYXI1S0xBRXJOejlvemk5ZlpscWFHL2lqcENaQzAxYWtBdXhlK2Jrc2dIUzRxbERyNTVNWDZOMncvXG4vZ2p2eFVZa2d3ZEtlNlhNRXVpUU8waXJaNXA3UGh4U0dsK29BYWZvUFFLQmdFcUNVLzBxMHZ5UDF3K0MwcGpEXG5qaVVTeWgrQTI0TVpHdnVMUmp4V2dEWmdIWWZYRHFlWVhZYXcxZ1ZUOFBWbys2Si9sYktxT2JvTHlLUWxiTjkzXG5iVjlMN2xOc2Jqd1hlZU14RzRoV2o3dFg4djZ0RmpVMkVOUFdSQkZzVnZpcnpveDZYZmVISTZMVWVZdWpLM01EXG5sKzdqMVowaXQzVit0NXFlcVlvUjVYTHpcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJoa2VzLW1kbS1hZG1pbkBidGdoY29tcGxhaW50cy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgImNsaWVudF9pZCI6ICIxMTA0MzQwNjQyMzUzNTcxNTU3MjEiLAogICJhdXRoX3VyaSI6ICJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvYXV0aCIsCiAgInRva2VuX3VyaSI6ICJodHRwczovL29hdXRoMi5nb29nbGVhcGlzLmNvbS90b2tlbiIsCiAgImF1dGhfcHJvdmlkZXJfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9vYXV0aDIvdjEvY2VydHMiLAogICJjbGllbnRfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9yb2JvdC92MS9tZXRhZGF0YS94NTA5L2hrZXMtbWRtLWFkbWluJTQwYnRnaGNvbXBsYWludHMuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJ1bml2ZXJzZV9kb21haW4iOiAiZ29vZ2xlYXBpcy5jb20iCn0K";
 
 let androidManagement;
 
@@ -56,21 +56,18 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition
+// 1. Get HKES Kiosk Policy Definition (Strict Schema Validated)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
-    name: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
     applications: [
       {
         packageName: 'com.google.android.inputmethod.latin', // Google Gboard Keyboard
-        installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT'
+        installType: 'REQUIRED_FOR_SETUP'
       },
       {
         packageName: 'edu.hkes.complaints', // BTGH Directory App
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.CAMERA', policy: 'GRANT' },
           { permission: 'android.permission.READ_EXTERNAL_STORAGE', policy: 'GRANT' }
@@ -79,7 +76,6 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.sec.android.app.dialer', // Samsung Native Phone Dialer (Galaxy A06)
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
           { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' },
@@ -91,7 +87,6 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.samsung.android.incallui', // Samsung In-Call UI & Auto Call Recorder
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
           { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' },
@@ -101,7 +96,6 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.google.android.dialer', // Google Phone / Dialer
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.READ_CALL_LOG', policy: 'GRANT' },
           { permission: 'android.permission.WRITE_CALL_LOG', policy: 'GRANT' }
@@ -110,7 +104,6 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.whatsapp', // WhatsApp
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.CAMERA', policy: 'GRANT' },
           { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
@@ -121,13 +114,13 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.whatsapp.w4b', // WhatsApp Business (Optional)
         installType: 'AVAILABLE',
-        defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.CAMERA', policy: 'GRANT' },
           { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' }
         ]
       }
     ],
+    defaultPermissionPolicy: 'GRANT',
     kioskCustomization: {
       powerButtonActions: 'POWER_BUTTON_AVAILABLE',
       systemErrorWarnings: 'ERROR_WARNINGS_ENABLED',
@@ -143,10 +136,7 @@ function buildHkesKioskPolicy() {
     uninstallAppsDisabled: true,
     usbFileTransferDisabled: true,
     modifyAccountsDisabled: true,
-    installUnknownSourcesAllowed: false,
-    systemUpdate: {
-      type: 'AUTOMATIC'
-    }
+    installUnknownSourcesAllowed: false
   };
 }
 
@@ -161,7 +151,7 @@ async function syncPolicyToEnterprise() {
       name: policyName,
       requestBody: buildHkesKioskPolicy(),
     });
-    console.log('✅ Policy auto-synced to Enterprise:', ENTERPRISE_NAME);
+    console.log('✅ Clean Policy auto-synced to Enterprise:', ENTERPRISE_NAME);
   } catch (err) {
     console.error('Error syncing policy:', err.message);
   }
@@ -177,6 +167,9 @@ app.post('/api/token/generate', async (req, res) => {
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
+      // Ensure policy is up-to-date
+      await syncPolicyToEnterprise();
+
       const tokenResponse = await androidManagement.enterprises.enrollmentTokens.create({
         parent: ENTERPRISE_NAME,
         requestBody: {
@@ -191,7 +184,6 @@ app.post('/api/token/generate', async (req, res) => {
     }
   }
 
-  // Google Android Device Policy (Android Enterprise) QR Payload with both EXTRA_ENROLLMENT_TOKEN & EXTRA_PROVISIONING_TOKEN
   const qrPayload = JSON.stringify({
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
