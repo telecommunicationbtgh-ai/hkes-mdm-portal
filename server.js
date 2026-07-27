@@ -58,12 +58,17 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition
+// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Gboard Keyboard)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
     name: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
     applications: [
+      {
+        packageName: 'com.google.android.inputmethod.latin', // Google Gboard Keyboard (Default Keyboard)
+        installType: 'REQUIRED_FOR_SETUP',
+        defaultPermissionPolicy: 'GRANT'
+      },
       {
         packageName: 'edu.hkes.complaints', // BTGH Directory App
         installType: 'REQUIRED_FOR_SETUP',
@@ -168,7 +173,7 @@ app.post('/api/token/generate', async (req, res) => {
     }
   }
 
-  // Universal Android Enterprise DPC Payload (No Checksum Error)
+  // Universal Android Enterprise DPC Payload
   const qrPayload = JSON.stringify({
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
     "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
