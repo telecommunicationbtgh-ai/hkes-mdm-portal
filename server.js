@@ -29,7 +29,8 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || ''; 
+// Official Registered HKES Institute Enterprise ID
+let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || 'enterprises/LC010s5q6f'; 
 const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
 const PROJECT_ID = 'btghcomplaints';
 
@@ -151,65 +152,23 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API: Enterprise Signup URL Generation
+// Auto-Sync Policy to Registered Enterprise
 // -------------------------------------------------------------
-app.get('/api/enterprise/signup-url', async (req, res) => {
-  if (!androidManagement) {
-    return res.status(400).json({ error: 'Service account key not loaded' });
-  }
-
+async function syncPolicyToEnterprise() {
+  if (!androidManagement || !ENTERPRISE_NAME) return;
   try {
-    const signupUrl = await androidManagement.signupUrls.create({
-      projectId: PROJECT_ID,
-      callbackUrl: 'https://hkes-mdm-portal.onrender.com/api/enterprise/callback'
-    });
-    res.json({ success: true, url: signupUrl.data.url });
-  } catch (error) {
-    console.error('Error creating signup URL:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Callback from Google Managed Play registration
-app.get('/api/enterprise/callback', async (req, res) => {
-  const { enterpriseToken } = req.query;
-  if (!enterpriseToken) {
-    return res.status(400).send('Enterprise token missing from callback');
-  }
-
-  try {
-    const response = await androidManagement.enterprises.create({
-      enterpriseToken: enterpriseToken,
-      requestBody: {
-        enterpriseDisplayName: 'HKES Institute'
-      }
-    });
-
-    ENTERPRISE_NAME = response.data.name; // Format: enterprises/LCxxxxxxxx
-    console.log('Enterprise Created Successfully:', ENTERPRISE_NAME);
-
-    // Apply Policy immediately
     const policyName = `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`;
     await androidManagement.enterprises.policies.patch({
       name: policyName,
       requestBody: buildHkesKioskPolicy(),
     });
-
-    res.send(`
-      <html>
-        <body style="font-family: sans-serif; text-align: center; padding: 3rem; background: #0f172a; color: white;">
-          <h2>✅ HKES Enterprise Successfully Registered!</h2>
-          <p>Enterprise Name: <strong>${ENTERPRISE_NAME}</strong></p>
-          <p style="color: #38bdf8;">Your system is now ready for scanning!</p>
-          <a href="/" style="background: #3b82f6; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; display: inline-block; margin-top: 1rem;">Return to MDM Dashboard</a>
-        </body>
-      </html>
-    `);
-  } catch (error) {
-    console.error('Error creating enterprise:', error);
-    res.status(500).send('Error creating enterprise: ' + error.message);
+    console.log('✅ Policy auto-synced to Enterprise:', ENTERPRISE_NAME);
+  } catch (err) {
+    console.error('Error syncing policy:', err.message);
   }
-});
+}
+
+syncPolicyToEnterprise();
 
 // -------------------------------------------------------------
 // API 2: Generate Provisioning Token & QR Code
@@ -223,12 +182,13 @@ app.post('/api/token/generate', async (req, res) => {
         parent: ENTERPRISE_NAME,
         requestBody: {
           policyName: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
-          duration: '2592000s'
+          duration: '2592000s' // 30 Days Token
         }
       });
       token = tokenResponse.data.value;
+      console.log('Generated Official Google Cloud Token:', token);
     } catch (err) {
-      console.warn('Using HKES Provisioning Token:', err.message);
+      console.warn('Error generating Google token:', err.message);
     }
   }
 
@@ -249,8 +209,8 @@ app.post('/api/token/generate', async (req, res) => {
     res.json({
       success: true,
       token: token,
-      enterpriseName: ENTERPRISE_NAME || 'HKES Institute Kiosk',
-      expirationTimestamp: "Never (Permanent)",
+      enterpriseName: ENTERPRISE_NAME,
+      expirationTimestamp: "30 Days",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
@@ -314,5 +274,6 @@ app.post('/api/device/command', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`====================================================`);
   console.log(`  HKES Institute MDM Dashboard running on port ${PORT}`);
+  console.log(`  Linked Enterprise: ${ENTERPRISE_NAME}`);
   console.log(`====================================================`);
 });
