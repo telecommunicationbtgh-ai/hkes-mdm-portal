@@ -58,7 +58,7 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung Auto-Call Recording)
+// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung Auto-Call Recording + Call Log Preservation)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
@@ -72,11 +72,13 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.sec.android.app.dialer', // Samsung Native Phone Dialer (Galaxy A06)
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT', // Pre-grant all recording permissions automatically
+        defaultPermissionPolicy: 'GRANT', // Pre-grant all recording & call log permissions automatically
         permissionGrants: [
           { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
           { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' },
-          { permission: 'android.permission.PROCESS_OUTGOING_CALLS', policy: 'GRANT' }
+          { permission: 'android.permission.PROCESS_OUTGOING_CALLS', policy: 'GRANT' },
+          { permission: 'android.permission.READ_CALL_LOG', policy: 'GRANT' },
+          { permission: 'android.permission.WRITE_CALL_LOG', policy: 'GRANT' }
         ]
       },
       {
@@ -85,13 +87,18 @@ function buildHkesKioskPolicy() {
         defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
-          { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' }
+          { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' },
+          { permission: 'android.permission.READ_CALL_LOG', policy: 'GRANT' }
         ]
       },
       {
         packageName: 'com.google.android.dialer', // Google Phone / Dialer
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT'
+        defaultPermissionPolicy: 'GRANT',
+        permissionGrants: [
+          { permission: 'android.permission.READ_CALL_LOG', policy: 'GRANT' },
+          { permission: 'android.permission.WRITE_CALL_LOG', policy: 'GRANT' }
+        ]
       },
       {
         packageName: 'com.whatsapp', // WhatsApp
