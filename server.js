@@ -57,7 +57,7 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung + Sound Policy)
+// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung Auto-Call Recording)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
@@ -71,12 +71,21 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.sec.android.app.dialer', // Samsung Native Phone Dialer (Galaxy A06)
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT'
+        defaultPermissionPolicy: 'GRANT', // Pre-grant all recording permissions automatically
+        permissionGrants: [
+          { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
+          { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' },
+          { permission: 'android.permission.PROCESS_OUTGOING_CALLS', policy: 'GRANT' }
+        ]
       },
       {
-        packageName: 'com.samsung.android.incallui', // Samsung In-Call UI & Native Call Recorder
+        packageName: 'com.samsung.android.incallui', // Samsung In-Call UI & Auto Call Recorder
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT'
+        defaultPermissionPolicy: 'GRANT',
+        permissionGrants: [
+          { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
+          { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' }
+        ]
       },
       {
         packageName: 'com.google.android.dialer', // Google Phone / Dialer
@@ -102,7 +111,7 @@ function buildHkesKioskPolicy() {
       statusBar: 'NOTIFICATIONS_DISABLED', // Prevent pull-down notification panel
       deviceSettings: 'SETTINGS_DISABLED'    // Block access to System Settings
     },
-    // Security, Sound & Hardware Restrictions
+    // Security, Sound, Vibration & Hardware Restrictions
     volumeMuteDisabled: true, // Block muting ringtone / volume
     keyguardDisabled: false,
     statusBarDisabled: true,
