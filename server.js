@@ -57,14 +57,29 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition
+// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
     name: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
     applications: [
       {
-        packageName: 'com.google.android.dialer', // System Phone / Dialer
+        packageName: 'edu.hkes.complaints', // BTGH Complaints App
+        installType: 'REQUIRED_FOR_SETUP',
+        defaultPermissionPolicy: 'GRANT'
+      },
+      {
+        packageName: 'com.sec.android.app.dialer', // Samsung Native Phone Dialer (Galaxy A06)
+        installType: 'REQUIRED_FOR_SETUP',
+        defaultPermissionPolicy: 'GRANT'
+      },
+      {
+        packageName: 'com.samsung.android.incallui', // Samsung In-Call UI & Native Call Recorder
+        installType: 'REQUIRED_FOR_SETUP',
+        defaultPermissionPolicy: 'GRANT'
+      },
+      {
+        packageName: 'com.google.android.dialer', // Google Phone / Dialer
         installType: 'REQUIRED_FOR_SETUP',
         defaultPermissionPolicy: 'GRANT'
       },
@@ -180,7 +195,7 @@ app.get('/api/devices', async (req, res) => {
     return res.json({
       isDemo: true,
       devices: [
-        { name: `${ENTERPRISE_NAME}/devices/demo-01`, state: 'ACTIVE', model: 'Galaxy A14', lastCheckin: new Date().toISOString(), simStatus: 'NORMAL' },
+        { name: `${ENTERPRISE_NAME}/devices/demo-01`, state: 'ACTIVE', model: 'Galaxy A06 (SM-A066B/DS)', lastCheckin: new Date().toISOString(), simStatus: 'NORMAL' },
         { name: `${ENTERPRISE_NAME}/devices/demo-02`, state: 'ACTIVE', model: 'Redmi Note 12', lastCheckin: new Date().toISOString(), simStatus: 'NORMAL' }
       ]
     });
