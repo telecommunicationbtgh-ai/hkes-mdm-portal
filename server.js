@@ -29,7 +29,6 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-// Official Registered HKES Institute Enterprise ID
 let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || 'enterprises/LC010s5q6f'; 
 const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
 const PROJECT_ID = 'btghcomplaints';
@@ -171,14 +170,14 @@ async function syncPolicyToEnterprise() {
 syncPolicyToEnterprise();
 
 // -------------------------------------------------------------
-// API 2: Generate Provisioning Token & QR Code
+// API 2: Generate Official Google Cloud Enrollment Token & QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'HKES2026SETUP';
+  let token = 'MADBYFEZQJXANCVBRPMN';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
-      const tokenResponse = await androidManagement.enterprises.provisioningTokens.create({
+      const tokenResponse = await androidManagement.enterprises.enrollmentTokens.create({
         parent: ENTERPRISE_NAME,
         requestBody: {
           policyName: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
