@@ -58,7 +58,7 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Samsung Auto-Call Recording + Call Log Preservation)
+// 1. Get HKES Kiosk Policy Definition (Phone + WhatsApp + BTGH App + Camera Enabled + Uninstall Blocked)
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
   return {
@@ -67,12 +67,16 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'edu.hkes.complaints', // BTGH Directory App
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT'
+        defaultPermissionPolicy: 'GRANT',
+        permissionGrants: [
+          { permission: 'android.permission.CAMERA', policy: 'GRANT' },
+          { permission: 'android.permission.READ_EXTERNAL_STORAGE', policy: 'GRANT' }
+        ]
       },
       {
         packageName: 'com.sec.android.app.dialer', // Samsung Native Phone Dialer (Galaxy A06)
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT', // Pre-grant all recording & call log permissions automatically
+        defaultPermissionPolicy: 'GRANT',
         permissionGrants: [
           { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
           { permission: 'android.permission.READ_PHONE_STATE', policy: 'GRANT' },
@@ -103,12 +107,22 @@ function buildHkesKioskPolicy() {
       {
         packageName: 'com.whatsapp', // WhatsApp
         installType: 'REQUIRED_FOR_SETUP',
-        defaultPermissionPolicy: 'GRANT'
+        defaultPermissionPolicy: 'GRANT',
+        permissionGrants: [
+          { permission: 'android.permission.CAMERA', policy: 'GRANT' },
+          { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' },
+          { permission: 'android.permission.READ_CONTACTS', policy: 'GRANT' },
+          { permission: 'android.permission.WRITE_CONTACTS', policy: 'GRANT' }
+        ]
       },
       {
         packageName: 'com.whatsapp.w4b', // WhatsApp Business (Optional)
         installType: 'AVAILABLE',
-        defaultPermissionPolicy: 'GRANT'
+        defaultPermissionPolicy: 'GRANT',
+        permissionGrants: [
+          { permission: 'android.permission.CAMERA', policy: 'GRANT' },
+          { permission: 'android.permission.RECORD_AUDIO', policy: 'GRANT' }
+        ]
       }
     ],
     // Multi-App Kiosk settings
@@ -119,11 +133,13 @@ function buildHkesKioskPolicy() {
       statusBar: 'NOTIFICATIONS_DISABLED', // Prevent pull-down notification panel
       deviceSettings: 'SETTINGS_DISABLED'    // Block access to System Settings
     },
-    // Security, Sound, Vibration & Hardware Restrictions
+    // Security, Sound, Camera, Uninstall & Hardware Restrictions
+    cameraDisabled: false, // CAMERA ENABLED for WhatsApp and System Apps
     volumeMuteDisabled: true, // Block muting ringtone / volume
     keyguardDisabled: false,
     statusBarDisabled: true,
     factoryResetDisabled: true, // Block Factory Reset
+    uninstallAppsDisabled: true, // Block Uninstalling Any App
     usbFileTransferDisabled: true, // Block USB File Copying
     modifyAccountsDisabled: true, // Block adding secondary Google accounts
     installUnknownSourcesAllowed: false, // Block APK sideloading
