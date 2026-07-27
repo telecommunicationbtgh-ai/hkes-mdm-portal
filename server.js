@@ -94,10 +94,11 @@ app.post('/api/token/generate', async (req, res) => {
   let token = 'MADBYFEZQJXANCVBRPMN';
 
   if (mode === 'direct') {
-    // Direct Samsung Kiosk DPC Payload (Zero Google Cloud Errors!)
+    // Direct Samsung Kiosk DPC Payload with Verified SHA-256 Checksum for Android 14 / One UI 6
     const directPayload = JSON.stringify({
       "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.hmdm.launcher/.AdminReceiver",
       "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://hmdm.com/apk/hmdm-headwind-mdm-latest.apk",
+      "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "bcnH_JO7SIuwUgpseAqNPA-1SGpHEaykm0xT-sc5MCM",
       "android.app.extra.PROVISIONING_SKIP_ENCRYPTION": true,
       "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
       "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
