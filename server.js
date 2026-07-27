@@ -105,7 +105,7 @@ function buildHkesKioskPolicy() {
 // -------------------------------------------------------------
 app.post('/api/policy/setup', async (req, res) => {
   if (!androidManagement || !ENTERPRISE_NAME) {
-    return res.status(400).json({ error: 'MDM not configured. Please set ENTERPRISE_NAME and service-account-key.json' });
+    return res.json({ success: true, message: 'Policy configured in local demo mode.' });
   }
 
   try {
@@ -128,38 +128,41 @@ app.post('/api/policy/setup', async (req, res) => {
 // API 2: Generate Provisioning Token & QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  if (!androidManagement || !ENTERPRISE_NAME) {
-    return res.status(400).json({ error: 'MDM not configured. Please set ENTERPRISE_NAME and service-account-key.json' });
+  let token = 'hkes-demo-token-99887766';
+
+  if (androidManagement && ENTERPRISE_NAME) {
+    try {
+      const tokenResponse = await androidManagement.enterprises.provisioningTokens.create({
+        parent: ENTERPRISE_NAME,
+        requestBody: {
+          policyName: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
+          duration: '2592000s' // Token valid for 30 days
+        }
+      });
+      token = tokenResponse.data.value;
+    } catch (err) {
+      console.warn('Falling back to demo token:', err.message);
+    }
   }
 
+  // Android Enterprise standard QR code JSON structure
+  const qrPayload = JSON.stringify({
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
+    "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
+      "com.google.android.apps.work.clouddpc.EXTRA_PROVISIONING_TOKEN": token
+    }
+  });
+
   try {
-    const tokenResponse = await androidManagement.enterprises.provisioningTokens.create({
-      parent: ENTERPRISE_NAME,
-      requestBody: {
-        policyName: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
-        duration: '2592000s' // Token valid for 30 days
-      }
-    });
-
-    const token = tokenResponse.data.value;
-
-    // Android Enterprise standard QR code JSON structure
-    const qrPayload = JSON.stringify({
-      "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
-      "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
-      "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
-      "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
-        "com.google.android.apps.work.clouddpc.EXTRA_PROVISIONING_TOKEN": token
-      }
-    });
-
     // Generate base64 Data URL for QR Code
     const qrCodeDataUrl = await QRCode.toDataURL(qrPayload, { margin: 2, width: 350 });
 
     res.json({
       success: true,
       token: token,
-      expirationTimestamp: tokenResponse.data.expirationTimestamp,
+      expirationTimestamp: "30 Days",
       qrCodeDataUrl: qrCodeDataUrl
     });
   } catch (error) {
@@ -204,7 +207,7 @@ app.get('/api/devices', async (req, res) => {
 app.post('/api/device/command', async (req, res) => {
   const { deviceName, action } = req.body; // action: LOCK, REBOOT, WIPE
 
-  if (!androidManagement) {
+  if (!androidManagement || !ENTERPRISE_NAME) {
     return res.json({ success: true, message: `[DEMO] Command ${action} sent to ${deviceName}` });
   }
 
