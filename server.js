@@ -69,7 +69,7 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Generate Fresh Fleet Policy Enrollment Token Code
+// API 2: Generate Knox Bypassed Google Cloud Enrollment QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
   let token = 'STFYIMXTPNELWMBHKHPW';
@@ -93,20 +93,35 @@ app.post('/api/token/generate', async (req, res) => {
         }
       });
       token = tokenResponse.data.value;
-      console.log('Generated Fresh Fleet Token:', token);
+      console.log('Generated Fresh Knox Bypass Token:', token);
     } catch (err) {
       console.warn('Error generating Google token:', err.message);
     }
   }
 
+  // Knox Bypassed QR Payload for Samsung Galaxy Devices
+  const knoxBypassPayload = JSON.stringify({
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
+    "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
+      "com.google.android.apps.work.clouddpc.EXTRA_ENROLLMENT_TOKEN": token,
+      "com.samsung.knox.container.DISABLE_KNOX": true,
+      "com.samsung.knox.PROVISIONING_BYPASS_KNOX": true
+    },
+    "android.app.extra.PROVISIONING_SKIP_ENCRYPTION": true,
+    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
+    "android.app.extra.PROVISIONING_USE_MOBILE_DATA": true
+  });
+
   try {
-    const qrCodeDataUrl = await QRCode.toDataURL(token, { margin: 2, width: 350 });
+    const qrCodeDataUrl = await QRCode.toDataURL(knoxBypassPayload, { margin: 2, width: 350 });
 
     res.json({
       success: true,
       token: token,
       enterpriseName: ENTERPRISE_NAME,
-      expirationTimestamp: "30 Days (Fresh Fleet Policy v1)",
+      expirationTimestamp: "30 Days (Knox Bypassed)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
