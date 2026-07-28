@@ -84,30 +84,63 @@ app.all('/rest/*', (req, res) => {
         kioskMode: false,
         lockSettings: true,
         prohibitUninstall: true,
+        showNonSystem: true,
         applications: [
           {
             name: "Phone",
+            pkg: "com.samsung.android.dialer",
+            showIcon: true,
+            system: true,
+            main: true
+          },
+          {
+            name: "Phone (Alt)",
             pkg: "com.sec.android.app.dialer",
             showIcon: true,
-            system: true
+            system: true,
+            main: true
           },
           {
             name: "WhatsApp",
             pkg: "com.whatsapp",
             showIcon: true,
-            system: false
+            system: false,
+            main: true
           },
           {
             name: "BTGH Directory",
             pkg: "edu.hkes.complaints",
             showIcon: true,
-            system: false
+            system: false,
+            main: true
           },
           {
-            name: "Gboard",
-            pkg: "com.google.android.inputmethod.latin",
-            showIcon: false,
-            system: true
+            name: "Chrome",
+            pkg: "com.android.chrome",
+            showIcon: true,
+            system: true,
+            main: true
+          },
+          {
+            name: "Play Store",
+            pkg: "com.android.vending",
+            showIcon: true,
+            system: true,
+            main: true
+          },
+          {
+            name: "Files",
+            pkg: "com.sec.android.app.myfiles",
+            showIcon: true,
+            system: true,
+            main: true
+          },
+          {
+            name: "Clock",
+            pkg: "com.sec.android.app.clockpackage",
+            showIcon: true,
+            system: true,
+            main: true
           }
         ]
       }
