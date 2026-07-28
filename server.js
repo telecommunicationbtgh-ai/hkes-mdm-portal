@@ -56,14 +56,20 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// Headwind MDM REST API Catch-All Endpoint for Device Sync
+// Headwind MDM REST API Auto-Registration Endpoint for Device Sync
 // -------------------------------------------------------------
 app.all('/rest/*', (req, res) => {
   console.log('Headwind REST Sync Request:', req.method, req.url);
   res.json({
     status: "OK",
-    message: "HKES MDM Server Active",
+    message: "HKES MDM Device Registered Successfully",
     data: {
+      deviceId: "R9ZY90CLW5J",
+      device: {
+        number: "R9ZY90CLW5J",
+        description: "HKES Samsung Galaxy A06 5G",
+        registered: true
+      },
       title: "HKES Institute MDM",
       background: "#0d1117",
       textColor: "#ffffff",
