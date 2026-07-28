@@ -44,7 +44,7 @@ androidManagement = getAuthClient();
 // Universal Headwind MDM Endpoint Handler
 // -------------------------------------------------------------
 const handleHeadwindSync = (req, res) => {
-  console.log('Headwind REST Request Received:', req.method, req.url);
+  console.log('Headwind REST Request Received:', req.method, req.url, req.body);
 
   res.header("Content-Type", "application/json; charset=UTF-8");
 
@@ -120,8 +120,7 @@ const handleHeadwindSync = (req, res) => {
     name: "HKES Hospital Strict Profile",
     type: "DEFAULT",
     description: "HKES Institute Kiosk Profile",
-    iconSize: "MEDIUM",
-    iconSizeInt: 1,
+    iconSize: 1,
     title: "HKES Institute MDM",
     desktopHeader: "HKES Institute - Basaveshwar Hospital",
     backgroundColor: "#0d1117",
