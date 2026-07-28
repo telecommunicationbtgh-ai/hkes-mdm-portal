@@ -29,8 +29,8 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || 'enterprises/LC010s5q6f'; 
-const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
+let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || 'enterprises/LC00shjp8v'; // Updated to Fresh HKES Enterprise
+const DEFAULT_MANAGED_ACCOUNT = 'deepakyeleri@gmail.com';
 const PROJECT_ID = 'btghcomplaints';
 
 // Base64 Encoded Service Account Credentials for Production Deployments
@@ -69,14 +69,14 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Generate Knox Bypassed Google Cloud Enrollment QR Code
+// API 2: Generate Google Cloud Enrollment Token for Enterprise LC00shjp8v
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'STFYIMXTPNELWMBHKHPW';
+  let token = 'IFRMHQJRFELMUIRBNYYQ';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
-      const policyName = `${ENTERPRISE_NAME}/policies/btgh-hospital-fleet-v1`;
+      const policyName = `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`;
       await androidManagement.enterprises.policies.patch({
         name: policyName,
         requestBody: buildHkesKioskPolicy()
@@ -88,40 +88,25 @@ app.post('/api/token/generate', async (req, res) => {
           policyName: policyName,
           duration: '2592000s',
           user: {
-            accountIdentifier: 'btgh-device-01@hkes.edu.in'
+            accountIdentifier: DEFAULT_MANAGED_ACCOUNT
           }
         }
       });
       token = tokenResponse.data.value;
-      console.log('Generated Fresh Knox Bypass Token:', token);
+      console.log('Generated Fresh Token for LC00shjp8v:', token);
     } catch (err) {
       console.warn('Error generating Google token:', err.message);
     }
   }
 
-  // Knox Bypassed QR Payload for Samsung Galaxy Devices
-  const knoxBypassPayload = JSON.stringify({
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
-    "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
-      "com.google.android.apps.work.clouddpc.EXTRA_ENROLLMENT_TOKEN": token,
-      "com.samsung.knox.container.DISABLE_KNOX": true,
-      "com.samsung.knox.PROVISIONING_BYPASS_KNOX": true
-    },
-    "android.app.extra.PROVISIONING_SKIP_ENCRYPTION": true,
-    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
-    "android.app.extra.PROVISIONING_USE_MOBILE_DATA": true
-  });
-
   try {
-    const qrCodeDataUrl = await QRCode.toDataURL(knoxBypassPayload, { margin: 2, width: 350 });
+    const qrCodeDataUrl = await QRCode.toDataURL(token, { margin: 2, width: 350 });
 
     res.json({
       success: true,
       token: token,
       enterpriseName: ENTERPRISE_NAME,
-      expirationTimestamp: "30 Days (Knox Bypassed)",
+      expirationTimestamp: "30 Days (Registered to deepakyeleri@gmail.com)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
