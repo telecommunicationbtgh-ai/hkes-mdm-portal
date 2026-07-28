@@ -56,6 +56,53 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
+// Headwind MDM REST API Catch-All Endpoint for Device Sync
+// -------------------------------------------------------------
+app.all('/rest/*', (req, res) => {
+  console.log('Headwind REST Sync Request:', req.method, req.url);
+  res.json({
+    status: "OK",
+    message: "HKES MDM Server Active",
+    data: {
+      title: "HKES Institute MDM",
+      background: "#0d1117",
+      textColor: "#ffffff",
+      iconSize: 1, // Integer 1 = Medium
+      desktopHeader: "HKES Institute - Basaveshwar Hospital",
+      applications: [
+        {
+          name: "Phone",
+          pkg: "com.sec.android.app.dialer",
+          showIcon: true,
+          system: true
+        },
+        {
+          name: "WhatsApp",
+          pkg: "com.whatsapp",
+          showIcon: true,
+          system: false
+        },
+        {
+          name: "BTGH Directory",
+          pkg: "edu.hkes.complaints",
+          showIcon: true,
+          system: false
+        },
+        {
+          name: "Gboard",
+          pkg: "com.google.android.inputmethod.latin",
+          showIcon: false,
+          system: true
+        }
+      ],
+      kioskMode: false,
+      lockSettings: true,
+      prohibitUninstall: true
+    }
+  });
+});
+
+// -------------------------------------------------------------
 // 1. Get HKES Policy Definition
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
