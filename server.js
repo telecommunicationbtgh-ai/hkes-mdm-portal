@@ -69,25 +69,31 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Generate User-Bound Google Cloud Enrollment Token Code
+// API 2: Generate Fresh Fleet Policy Enrollment Token Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'QQILBOERMPMSHSOGNDQG';
+  let token = 'STFYIMXTPNELWMBHKHPW';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
+      const policyName = `${ENTERPRISE_NAME}/policies/btgh-hospital-fleet-v1`;
+      await androidManagement.enterprises.policies.patch({
+        name: policyName,
+        requestBody: buildHkesKioskPolicy()
+      });
+
       const tokenResponse = await androidManagement.enterprises.enrollmentTokens.create({
         parent: ENTERPRISE_NAME,
         requestBody: {
-          policyName: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
+          policyName: policyName,
           duration: '2592000s',
           user: {
-            accountIdentifier: DEFAULT_MANAGED_ACCOUNT
+            accountIdentifier: 'btgh-device-01@hkes.edu.in'
           }
         }
       });
       token = tokenResponse.data.value;
-      console.log('Generated User-Bound Google Cloud Token:', token);
+      console.log('Generated Fresh Fleet Token:', token);
     } catch (err) {
       console.warn('Error generating Google token:', err.message);
     }
@@ -100,7 +106,7 @@ app.post('/api/token/generate', async (req, res) => {
       success: true,
       token: token,
       enterpriseName: ENTERPRISE_NAME,
-      expirationTimestamp: "30 Days (User Bound to btghtelecom@gmail.com)",
+      expirationTimestamp: "30 Days (Fresh Fleet Policy v1)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
