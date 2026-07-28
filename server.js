@@ -41,17 +41,87 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// Universal Headwind MDM Endpoint Handler (catches /rest/*, /public/*, /sync/*)
+// Universal Headwind MDM Endpoint Handler
 // -------------------------------------------------------------
 const handleHeadwindSync = (req, res) => {
   console.log('Headwind REST Request Received:', req.method, req.url);
+
+  res.header("Content-Type", "application/json; charset=UTF-8");
+
+  const apps = [
+    {
+      id: 1,
+      name: "Phone",
+      pkg: "com.samsung.android.dialer",
+      showIcon: true,
+      system: true,
+      main: true
+    },
+    {
+      id: 2,
+      name: "Phone (Alt)",
+      pkg: "com.sec.android.app.dialer",
+      showIcon: true,
+      system: true,
+      main: true
+    },
+    {
+      id: 3,
+      name: "WhatsApp",
+      pkg: "com.whatsapp",
+      showIcon: true,
+      system: false,
+      main: true
+    },
+    {
+      id: 4,
+      name: "BTGH Directory",
+      pkg: "edu.hkes.complaints",
+      showIcon: true,
+      system: false,
+      main: true
+    },
+    {
+      id: 5,
+      name: "Chrome",
+      pkg: "com.android.chrome",
+      showIcon: true,
+      system: true,
+      main: true
+    },
+    {
+      id: 6,
+      name: "Play Store",
+      pkg: "com.android.vending",
+      showIcon: true,
+      system: true,
+      main: true
+    },
+    {
+      id: 7,
+      name: "Files",
+      pkg: "com.sec.android.app.myfiles",
+      showIcon: true,
+      system: true,
+      main: true
+    },
+    {
+      id: 8,
+      name: "Clock",
+      pkg: "com.sec.android.app.clockpackage",
+      showIcon: true,
+      system: true,
+      main: true
+    }
+  ];
 
   const configObj = {
     id: 1,
     name: "HKES Hospital Strict Profile",
     type: "DEFAULT",
     description: "HKES Institute Kiosk Profile",
-    iconSize: 1, // Integer 1 = Medium
+    iconSize: "MEDIUM",
+    iconSizeInt: 1,
     title: "HKES Institute MDM",
     desktopHeader: "HKES Institute - Basaveshwar Hospital",
     backgroundColor: "#0d1117",
@@ -60,64 +130,7 @@ const handleHeadwindSync = (req, res) => {
     lockSettings: true,
     prohibitUninstall: true,
     showNonSystem: true,
-    applications: [
-      {
-        name: "Phone",
-        pkg: "com.samsung.android.dialer",
-        showIcon: true,
-        system: true,
-        main: true
-      },
-      {
-        name: "Phone (Alt)",
-        pkg: "com.sec.android.app.dialer",
-        showIcon: true,
-        system: true,
-        main: true
-      },
-      {
-        name: "WhatsApp",
-        pkg: "com.whatsapp",
-        showIcon: true,
-        system: false,
-        main: true
-      },
-      {
-        name: "BTGH Directory",
-        pkg: "edu.hkes.complaints",
-        showIcon: true,
-        system: false,
-        main: true
-      },
-      {
-        name: "Chrome",
-        pkg: "com.android.chrome",
-        showIcon: true,
-        system: true,
-        main: true
-      },
-      {
-        name: "Play Store",
-        pkg: "com.android.vending",
-        showIcon: true,
-        system: true,
-        main: true
-      },
-      {
-        name: "Files",
-        pkg: "com.sec.android.app.myfiles",
-        showIcon: true,
-        system: true,
-        main: true
-      },
-      {
-        name: "Clock",
-        pkg: "com.sec.android.app.clockpackage",
-        showIcon: true,
-        system: true,
-        main: true
-      }
-    ]
+    applications: apps
   };
 
   const deviceObj = {
@@ -128,7 +141,7 @@ const handleHeadwindSync = (req, res) => {
     status: "ACTIVE"
   };
 
-  res.json({
+  res.status(200).json({
     status: "OK",
     message: "HKES MDM Sync Successful",
     data: {
