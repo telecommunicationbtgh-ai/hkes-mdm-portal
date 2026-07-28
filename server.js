@@ -131,28 +131,40 @@ const handleHeadwindSync = (req, res) => {
     }
   ];
 
+  const configData = {
+    id: 1,
+    name: "HKES Hospital Strict Profile",
+    desktopHeader: "HKES Institute - Basaveshwar Hospital",
+    backgroundColor: "#0d1117",
+    textColor: "#ffffff",
+    iconSize: 1,
+    kioskMode: false,
+    lockSettings: true,
+    prohibitUninstall: true,
+    showNonSystem: true,
+    applications: apps,
+    device: {
+      id: 1,
+      number: "R9ZY90CLW5J",
+      description: "HKES Samsung Galaxy A06 5G",
+      registered: true,
+      status: "ACTIVE"
+    }
+  };
+
   res.status(200).json({
     status: "OK",
     message: null,
-    data: {
-      id: 1,
-      name: "HKES Hospital Strict Profile",
-      desktopHeader: "HKES Institute - Basaveshwar Hospital",
-      backgroundColor: "#0d1117",
-      textColor: "#ffffff",
-      iconSize: 1,
-      kioskMode: false,
-      lockSettings: true,
-      prohibitUninstall: true,
-      showNonSystem: true,
-      applications: apps
-    }
+    data: configData
   });
 };
 
+// Catch-all for Headwind REST endpoints
 app.all('/rest/*', handleHeadwindSync);
 app.all('/public/*', handleHeadwindSync);
 app.all('/sync/*', handleHeadwindSync);
+app.post('/rest/public/sync/configuration/*', handleHeadwindSync);
+app.get('/rest/public/sync/configuration/*', handleHeadwindSync);
 
 // Explicit route for Root '/'
 app.get('/', (req, res) => {
