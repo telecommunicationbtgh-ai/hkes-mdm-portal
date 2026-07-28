@@ -69,10 +69,10 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Generate Multi-Use Google Cloud Enrollment Token Code
+// API 2: Generate User-Bound Google Cloud Enrollment Token Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'XTDZEWHFQOBQHMRCYGQE';
+  let token = 'QQILBOERMPMSHSOGNDQG';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
@@ -81,11 +81,13 @@ app.post('/api/token/generate', async (req, res) => {
         requestBody: {
           policyName: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
           duration: '2592000s',
-          oneTimeOnly: false // Multi-use for all 40 devices!
+          user: {
+            accountIdentifier: DEFAULT_MANAGED_ACCOUNT
+          }
         }
       });
       token = tokenResponse.data.value;
-      console.log('Generated Multi-Use Google Cloud Token:', token);
+      console.log('Generated User-Bound Google Cloud Token:', token);
     } catch (err) {
       console.warn('Error generating Google token:', err.message);
     }
@@ -98,7 +100,7 @@ app.post('/api/token/generate', async (req, res) => {
       success: true,
       token: token,
       enterpriseName: ENTERPRISE_NAME,
-      expirationTimestamp: "30 Days (Multi-Use for 40 Devices)",
+      expirationTimestamp: "30 Days (User Bound to btghtelecom@gmail.com)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
