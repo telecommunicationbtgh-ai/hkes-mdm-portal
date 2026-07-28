@@ -34,7 +34,7 @@ const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
 const PROJECT_ID = 'btghcomplaints';
 
 // Base64 Encoded Service Account Credentials for Production Deployments
-const B64_KEY = "ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiYnRnaGNvbXBsYWludHMiLAogICJwcml2YXRlX2tleV9pZCI6ICJiNDFmZWY3ZTdmYzdmNGU4MTMxZjAwYjAxZGI2MDkxZjVhYTAwNzZjIiwKICAicHJpdmF0ZV9rZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdmdJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLZ3dnZ1NrQWdFQUFvSUJBUUMvVEVoUzl5dWdLUlcxXG4wdlQ4aXVnVG9kYmZIKzRKejJnQW9qeGI2a1QwTnF6RFF3ck1SbFkzV0UxL2pwbWFPUGxkbVNPYVJYR0gxbTVmXG4zT2lFeHEvSFU1elp2RTRLRHBTNXlNendHRThybDU1K2RqaDdOdlNkTTl1SDlTd1grbXpQN2pqbG5CaDFZK0VXXG54TkRxZ3dEelVGVm1URUpmODNYQWs5Q2N2VzQ2SWJRS0xreHBMSkc0VWRQTzB6RDdtL2lJemRoMFlnMzFkajM5XG5SMXYvRytuMHE5Qks1TFl0dGFDekV0ZU5PTnpBbmk4MmtpS1dwU21TTmkyR25MQ3V5dmlJaWNUbFpVNEM1TmZhXG5wMzVsVUFVZUJRWSszTmxkczU3SjNzcU9XeGo5eHFyY0VQemI2VWtYWW8xNmgrV2JsckVrckN2Ry9tVWVRQ21wXG5ObjF3VG9MakFnTUJBQUVDZ2dFQUdqRUtrZmx2aXEwMVlNQ3lkRVZjZ3h1Y2ZNNDFYRnVMWk5MUnF0QUhndHhkXG5pUnFMeHU0MmJidDBXT3VnVWtKTXVpajJlKy9ZSEg0YWZKdVZabUNCdnF2UEJPeklOtHhpZ0pKaXFVZHBYbE1PSjNaTklhYi9PVWpHL0lPaFZPbTdwUEFzMkNOK25kUUJIbndKK2tVQ3dnTVpyWEdsXG5TSHRzNUljZGZ6QVlCNnJ2U3FlSTJWNitlWXJ2pE1WV2lyMWFEdkpuMXJVNzZqakJYanEyYTlQWS9TNDUrRXJrXG5zbTNWMkxLMUI0SnF4NE9vT2M4UFdJNTV3a3lnb0s3S1FOTWJTNCsraVFTdTl4QkV5cVJvREpDRlVMdUtFWnFWXG5pRURJL1ZReVBpRW5LMnhPMWcrc01OL0pZTmIxaFNjb0xDakw2S1krT1FLQmdRRGVTT3pvbHpWK0xHNlFnSzZmXG5qV0U1N0dRMEpDOEpwaGNlNHlURzdyelgybUNVU3pQSlZPUVBrMjhnQVJUakZrSjE1UFkyNUpWTHFrMy9QNUtxXG4zaUxOWFdHdUNNMjRGMVo1SFB1OW44ckJTaEZlK21KZE1iaTZlNTdkNHA4ZkduZGlDMS9yTVZYbXFmQnIwejBqXG54cnhUdFpqRDdhTlBpVDdCTlhPVkJFRUl4d0tCZ1FEY1VDdXlSM09iOStvRXNFbUVBVEZRdDB5d0C3NDg4MVdPXG5GT3JJaGd0bDh3R0dCVzlmOTFDZkFKZFhGaW1tQUNicVJHSnN3QTN2UHZmSFNUazRBNzc3L1VrUG54bFFVNWZmXG5alh5OXlJWGY4RGUwcHZCVk1XNGUvN2hJektWSlBCTjExU0N1a01PWG1ZeWh0NUhVQjNqYklJODFoOU51ZGpVXG5Pc21xNWdyeEJRS0JnUUM5R1pyNWo5R0JJamw1RXcvN1NpSWhUYm85SlY4aXZUcEVHNFpvK2lhTEZ3czhmUEYwXG5ZSlNYcjV4RXhNYkpIV0d5dS9LOTVoNGdQYVNXOWJWSFNTeWhGSTRKcVJHaGY3RWYzWWxIMncxNC9CTGxFdXJsXG5UMnhRc09RSTdVWUpQZEc4QmVNMnlVVERzMlNGeGpIb0lxU0tMaDNrNkdBYlJLMnZYbEtTdmdpNWR3S0JnUUNMXG5yaXkySUlVVTJ1NjlRRU9yOU5HZWVraWQ0b0IzeGxOMC9LQUt1S25iWG1HVjVqWkI0dHh6b3YxUTBwVmZVUE5iXG5UallVK3dNYXI1S0LFRXJOejlvemk5ZlpscWFHL2lqcENaQzAxYWtBdXhlK2Jrc2dIUzRxbERyNTVNWDZOMncvXG4vZ2p2eFVZa2d3ZEtlNlhNRXVpUU8waXJaNXA3UGh4U0dsK29BYWZvUFFLQmdFcUNVLzBxMHZ5UDF3K0MwcGpEXG5qaVVTeWgrQTI0TVpHdnVMUmp4V2dEWmdIWWZYRHFlWVhZYXcxZ1ZUOFBWbys2Si9sYktxT2JvTHlLUWxiTjkzXG5iVjlMN2xOc2Jqd1hlZU14RzRoV2o3dFg4djZ0RmpVMkVOUFdSQkZzVnZpcnpveDZYZmVISTZMVWVZdWpLM01EXG5sKzdqMVowaXQzVit0NXFlcVlvUjVYTHpcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJoa2VzLW1kbS1hZG1pbkBidGdoY29tcGxhaW50cy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgImNsaWVudF9pZCI6ICIxMTA0MzQwNjQyMzUzNTcxNTU3MjEiLAogICJhdXRoX3VyaSI6ICJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvYXV0aCIsCiAgInRva2VuX3VyaSI6ICJodHRwczovL29hdXRoMi5nb29nbGVhcGlzLmNvbS90b2tlbiIsCiAgImF1dGhfcHJvdmlkZXJfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9vYXV0aDIvdjEvY2VydHMiLAogICJjbGllbnRfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9yb2JvdC92MS9tZXRhZGF0YS94NTA5L2hrZXMtbWRtLWFkbWluJTQwYnRnaGNvbXBsYWludHMuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJ1bml2ZXJzZV9kb21haW4iOiAiZ29vZ2xlYXBpcy5jb20iCn0K";
+const B64_KEY = "ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiYnRnaGNvbXBsYWludHMiLAogICJwcml2YXRlX2tleV9pZCI6ICJiNDFmZWY3ZTdmYzdmNGU4MTMxZjAwYjAxZGI2MDkxZjVhYTAwNzZjIiwKICAicHJpdmF0ZV9rZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdmdJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLZ3dnZ1NrQWdFQUFvSUJBUUMvVEVoUzl5dWdLUlcxXG4wdlQ4aXVnVG9kYmZIKzRKejJnQW9qeGI2a1QwTnF6RFF3ck1SbFkzV0UxL2pwbWFPUGxkbVNPYVJYR0gxbTVmXG4zT2lFeHEvSFU1elp2RTRLRHBTNXlNendHRThybDU1K2RqaDdOdlNkTTl1SDlTd1grbXpQN2pqbG5CaDFZK0VXXG54TkRxZ3dEelVGVm1URUpmODNYQWs5Q2N2VzQ2SWJRS0xreHBMSkc0VWRQTzB6RDdtL2lJemRoMFlnMzFkajM5XG5SMXYvRytuMHE5Qks1TFl0dGFDekV0ZU5PTnpBbmk4MmtpS1dwU21TTmkyR25MQ3V5dmlJaWNUbFpVNEM1TmZhXG5wMzVsVUFVZUJRWSszTmxkczU3SjNzcU9XeGo5eHFyY0VQemI2VWtYWW8xNmgrV2JsckVrckN2Ry9tVWVRQ21wXG5ObjF3VG9MakFnTUJBQUVDZ2dFQUdqRUtrZmx2aXEwMVlNQ3lkRVZjZ3h1Y2ZNNDFYRnVMWk5MUnF0QUhndHhkXG5pUnFMeHU0MmJidDBXT3VnVWtKTXVpajJlKy9ZSEg0YWZKdVZabUNCdnF2UEJPeklOtHhpZ0pKaXFVZHBYbE1PSjNaTklhYi9PVWpHL0lPaFZPbTdwUEFzMkNOK25kUUJIbndKK2tVQ3dnTVpyWEdsXG5TSHRzNUljZGZ6QVlCNnJ2U3FlSTJWNitlWXJ2pE1WV2lyMWFEdkpuMXJVNzZqakJYanEyYTlQWS9TNDUrRXJrXG5zbTNWMkxLMUI0SnF4NE9vT2M4UFdJNTV3a3lnb0s3S1FOTWJTNCsraVFTdTl4QkV5cVJvREpDRlVMdUtFWnFWXG5pRURJL1ZReVBpRW5LMnhPMWcrc01OL0pZTmIxaFNjb0xDakw2S1krT1FLQmdRRGVTT3pvbHpWK0xHNlFnSzZmXG5qV0U1N0dRMEpDOEpwaGNlNHlURzdyelgybUNVU3pQSlZPUVBrMjhnQVRTakZrSjE1UFkyNUpWTHFrMy9QNUtxXG4zaUxOWFdHdUNNMjRGMVo1SFB1OW44ckJTaEZlK21KZE1iaTZlNTdkNHA4ZkduZGlDMS9yTVZYbXFmQnIwejBqXG54cnhUdFpqRDdhTlBpVDdCTlhPVkJFRUl4d0tCZ1FEY1VDdXlSM09iOStvRXNFbUVBVEZRdDB5d0C3NDg4MVdPXG5GT3JJaGd0bDh3R0dCVzlmOTFDZkFKZFhGaW1tQUNicVJHSnN3QTN2UHZmSFNUazRBNzc3L1VrUG54bFFVNWZmXG5alh5OXlJWGY4RGUwcHZCVk1XNGUvN2hJektWSlBCTjExU0N1a01PWG1ZeWh0NUhVQjNqYklJODFoOU51ZGpVXG5Pc21xNWdyeEJRS0JnUUM5R1pyNWo5R0JJamw1RXcvN1NpSWhUYm85SlY4aXZUcEVHNFpvK2lhTEZ3czhmUEYwXG5ZSlNYcjV4RXhNYkpIV0d5dS9LOTVoNGdQYVNXOWJWSFNTeWhGSTRKcVJHaGY3RWYzWWxIMncxNC9CTGxFdXJsXG5UMnhRc09RSTdVWUpQZEc4QmVNMnlVVERzMlNGeGpIb0lxU0tMaDNrNkdBYlJLMnZYbEtTdmdpNWR3S0JnUUNMXG5yaXkySUlVVTJ1NjlRRU9yOU5HZWVraWQ0b0IzeGxOMC9LQUt1S25iWG1HVjVqWkI0dHh6b3YxUTBwVmZVUE5iXG5UallVK3dNYXI1S0LFRXJOejlvemk5ZlpscWFHL2lqcENaQzAxYWtBdXhlK2Jrc2dIUzRxbERyNTVNWDZOMncvXG4vZ2p2eFVZa2d3ZEtlNlhNRXVpUU8waXJaNXA3UGh4U0dsK29BYWZvUFFLQmdFcUNVLzBxMHZ5UDF3K0MwcGpEXG5qaVVTeWgrQTI0TVpHdnVMUmp4V2dEWmdIWWZYRHFlWVhZYXcxZ1ZUOFBWbys2Si9sYktxT2JvTHlLUWxiTjkzXG5iVjlMN2xOc2Jqd1hlZU14RzRoV2o3dFg4djZ0RmpVMkVOUFdSQkZzVnZpcnpveDZYZmVISTZMVWVZdWpLM01EXG5sKzdqMVowaXQzVit0NXFlcVlvUjVYTHpcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJoa2VzLW1kbS1hZG1pbkBidGdoY29tcGxhaW50cy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgImNsaWVudF9pZCI6ICIxMTA0MzQwNjQyMzUzNTcxNTU3MjEiLAogICJhdXRoX3VyaSI6ICJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvYXV0aCIsCiAgInRva2VuX3VyaSI6ICJodHRwczovL29hdXRoMi5nb29nbGVhcGlzLmNvbS90b2tlbiIsCiAgImF1dGhfcHJvdmlkZXJfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9vYXV0aDIvdjEvY2VydHMiLAogICJjbGllbnRfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9yb2JvdC92MS9tZXRhZGF0YS94NTA5L2hrZXMtbWRtLWFkbWluJTQwYnRnaGNvbXBsYWludHMuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJ1bml2ZXJzZV9kb21haW4iOiAiZ29vZ2xlYXBpcy5jb20iCn0K";
 
 let androidManagement;
 
@@ -64,46 +64,53 @@ app.all('/rest/*', (req, res) => {
     status: "OK",
     message: "HKES MDM Device Registered Successfully",
     data: {
-      deviceId: "R9ZY90CLW5J",
       device: {
+        id: 1,
         number: "R9ZY90CLW5J",
         description: "HKES Samsung Galaxy A06 5G",
-        registered: true
+        registered: true,
+        status: "ACTIVE"
       },
-      title: "HKES Institute MDM",
-      background: "#0d1117",
-      textColor: "#ffffff",
-      iconSize: 1, // Integer 1 = Medium
-      desktopHeader: "HKES Institute - Basaveshwar Hospital",
-      applications: [
-        {
-          name: "Phone",
-          pkg: "com.sec.android.app.dialer",
-          showIcon: true,
-          system: true
-        },
-        {
-          name: "WhatsApp",
-          pkg: "com.whatsapp",
-          showIcon: true,
-          system: false
-        },
-        {
-          name: "BTGH Directory",
-          pkg: "edu.hkes.complaints",
-          showIcon: true,
-          system: false
-        },
-        {
-          name: "Gboard",
-          pkg: "com.google.android.inputmethod.latin",
-          showIcon: false,
-          system: true
-        }
-      ],
-      kioskMode: false,
-      lockSettings: true,
-      prohibitUninstall: true
+      configuration: {
+        id: 1,
+        name: "HKES Hospital Strict Profile",
+        type: "DEFAULT",
+        description: "HKES Institute Kiosk Profile",
+        iconSize: 1, // Integer 1 = Medium
+        title: "HKES Institute MDM",
+        desktopHeader: "HKES Institute - Basaveshwar Hospital",
+        backgroundColor: "#0d1117",
+        textColor: "#ffffff",
+        kioskMode: false,
+        lockSettings: true,
+        prohibitUninstall: true,
+        applications: [
+          {
+            name: "Phone",
+            pkg: "com.sec.android.app.dialer",
+            showIcon: true,
+            system: true
+          },
+          {
+            name: "WhatsApp",
+            pkg: "com.whatsapp",
+            showIcon: true,
+            system: false
+          },
+          {
+            name: "BTGH Directory",
+            pkg: "edu.hkes.complaints",
+            showIcon: true,
+            system: false
+          },
+          {
+            name: "Gboard",
+            pkg: "com.google.android.inputmethod.latin",
+            showIcon: false,
+            system: true
+          }
+        ]
+      }
     }
   });
 });
