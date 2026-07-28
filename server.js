@@ -41,7 +41,7 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// Universal Headwind MDM Endpoint Handler
+// Universal Headwind MDM Endpoint Handler (Strict DTO Match)
 // -------------------------------------------------------------
 const handleHeadwindSync = (req, res) => {
   console.log('Headwind REST Request Received:', req.method, req.url, req.body);
@@ -55,7 +55,9 @@ const handleHeadwindSync = (req, res) => {
       pkg: "com.samsung.android.dialer",
       showIcon: true,
       system: true,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     },
     {
       id: 2,
@@ -63,7 +65,9 @@ const handleHeadwindSync = (req, res) => {
       pkg: "com.sec.android.app.dialer",
       showIcon: true,
       system: true,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     },
     {
       id: 3,
@@ -71,7 +75,9 @@ const handleHeadwindSync = (req, res) => {
       pkg: "com.whatsapp",
       showIcon: true,
       system: false,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     },
     {
       id: 4,
@@ -79,7 +85,9 @@ const handleHeadwindSync = (req, res) => {
       pkg: "edu.hkes.complaints",
       showIcon: true,
       system: false,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     },
     {
       id: 5,
@@ -87,7 +95,9 @@ const handleHeadwindSync = (req, res) => {
       pkg: "com.android.chrome",
       showIcon: true,
       system: true,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     },
     {
       id: 6,
@@ -95,7 +105,9 @@ const handleHeadwindSync = (req, res) => {
       pkg: "com.android.vending",
       showIcon: true,
       system: true,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     },
     {
       id: 7,
@@ -103,7 +115,9 @@ const handleHeadwindSync = (req, res) => {
       pkg: "com.sec.android.app.myfiles",
       showIcon: true,
       system: true,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     },
     {
       id: 8,
@@ -111,42 +125,27 @@ const handleHeadwindSync = (req, res) => {
       pkg: "com.sec.android.app.clockpackage",
       showIcon: true,
       system: true,
-      main: true
+      main: true,
+      type: "PUBLIC",
+      version: "1.0"
     }
   ];
 
-  const configObj = {
-    id: 1,
-    name: "HKES Hospital Strict Profile",
-    type: "DEFAULT",
-    description: "HKES Institute Kiosk Profile",
-    iconSize: 1,
-    title: "HKES Institute MDM",
-    desktopHeader: "HKES Institute - Basaveshwar Hospital",
-    backgroundColor: "#0d1117",
-    textColor: "#ffffff",
-    kioskMode: false,
-    lockSettings: true,
-    prohibitUninstall: true,
-    showNonSystem: true,
-    applications: apps
-  };
-
-  const deviceObj = {
-    id: 1,
-    number: "R9ZY90CLW5J",
-    description: "HKES Samsung Galaxy A06 5G",
-    registered: true,
-    status: "ACTIVE"
-  };
-
   res.status(200).json({
     status: "OK",
-    message: "HKES MDM Sync Successful",
+    message: null,
     data: {
-      ...configObj,
-      device: deviceObj,
-      configuration: configObj
+      id: 1,
+      name: "HKES Hospital Strict Profile",
+      desktopHeader: "HKES Institute - Basaveshwar Hospital",
+      backgroundColor: "#0d1117",
+      textColor: "#ffffff",
+      iconSize: 1,
+      kioskMode: false,
+      lockSettings: true,
+      prohibitUninstall: true,
+      showNonSystem: true,
+      applications: apps
     }
   });
 };
