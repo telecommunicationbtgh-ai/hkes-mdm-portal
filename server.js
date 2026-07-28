@@ -29,8 +29,8 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || 'enterprises/LC00shjp8v'; // Updated to Fresh HKES Enterprise
-const DEFAULT_MANAGED_ACCOUNT = 'deepakyeleri@gmail.com';
+let ENTERPRISE_NAME = process.env.ENTERPRISE_NAME || 'enterprises/LC010s5q6f'; // Original HKES Institute Enterprise
+const DEFAULT_MANAGED_ACCOUNT = 'btghtelecom@gmail.com';
 const PROJECT_ID = 'btghcomplaints';
 
 // Base64 Encoded Service Account Credentials for Production Deployments
@@ -69,10 +69,10 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Generate Google Cloud Enrollment Token for Enterprise LC00shjp8v
+// API 2: Generate Original Google Cloud Enrollment Token & QR Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  let token = 'IFRMHQJRFELMUIRBNYYQ';
+  let token = 'FFNJXBGDSWHPKACVMIHR';
 
   if (androidManagement && ENTERPRISE_NAME) {
     try {
@@ -93,20 +93,31 @@ app.post('/api/token/generate', async (req, res) => {
         }
       });
       token = tokenResponse.data.value;
-      console.log('Generated Fresh Token for LC00shjp8v:', token);
+      console.log('Generated Original HKES Token:', token);
     } catch (err) {
       console.warn('Error generating Google token:', err.message);
     }
   }
 
+  // Pure Android Enterprise Spec for Google Device Policy
+  const googlePayload = JSON.stringify({
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.google.android.apps.work.clouddpc/.DeviceAdminReceiver",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "I5Y2vTO0gOwhxODWiTO6dfMsqbAo4XYAXw3Vz1PywT0",
+    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://play.google.com/managed/download/android_device_policy.apk",
+    "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
+      "com.google.android.apps.work.clouddpc.EXTRA_ENROLLMENT_TOKEN": token
+    },
+    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true
+  });
+
   try {
-    const qrCodeDataUrl = await QRCode.toDataURL(token, { margin: 2, width: 350 });
+    const qrCodeDataUrl = await QRCode.toDataURL(googlePayload, { margin: 2, width: 350 });
 
     res.json({
       success: true,
       token: token,
       enterpriseName: ENTERPRISE_NAME,
-      expirationTimestamp: "30 Days (Registered to deepakyeleri@gmail.com)",
+      expirationTimestamp: "30 Days (Registered to btghtelecom@gmail.com)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
