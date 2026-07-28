@@ -56,34 +56,6 @@ function getAuthClient() {
 androidManagement = getAuthClient();
 
 // -------------------------------------------------------------
-// Headwind MDM Server API Endpoints (Strict Java Type Schema Validated)
-// -------------------------------------------------------------
-app.all('/rest/*', (req, res) => {
-  console.log('Headwind MDM Request:', req.method, req.url);
-  res.json({
-    status: "OK",
-    data: {
-      backgroundColor: "#0f172a",
-      textColor: "#ffffff",
-      title: "HKES Institute",
-      iconSize: 1, // Integer value 1 = Medium icon size
-      desktopHeader: "HKES Institute MDM",
-      applications: [
-        { pkg: "com.sec.android.app.dialer", name: "Phone", showIcon: true, system: true },
-        { pkg: "com.whatsapp", name: "WhatsApp", showIcon: true, system: false },
-        { pkg: "edu.hkes.complaints", name: "BTGH Directory", showIcon: true, system: false },
-        { pkg: "com.google.android.inputmethod.latin", name: "Gboard", showIcon: false, system: true }
-      ],
-      mainApp: "edu.hkes.complaints",
-      kioskMode: true,
-      lockReset: true,
-      lockSettings: true,
-      password: "Btgh@2024"
-    }
-  });
-});
-
-// -------------------------------------------------------------
 // 1. Get HKES Policy Definition
 // -------------------------------------------------------------
 function buildHkesKioskPolicy() {
@@ -97,31 +69,36 @@ function buildHkesKioskPolicy() {
 }
 
 // -------------------------------------------------------------
-// API 2: Generate Headwind MDM Strict Kiosk QR Code
+// API 2: Generate Multi-Use Google Cloud Enrollment Token Code
 // -------------------------------------------------------------
 app.post('/api/token/generate', async (req, res) => {
-  const headwindPayload = JSON.stringify({
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "com.hmdm.launcher/.AdminReceiver",
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://hmdm.com/apk/hmdm-headwind-mdm-latest.apk",
-    "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "bcnH_JO7SIuwUgpseAqNPA-1SGpHEaykm0xT-sc5MCM",
-    "android.app.extra.PROVISIONING_SKIP_ENCRYPTION": true,
-    "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
-    "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
-      "com.hmdm.SERVER_HOST": "hkes-mdm-portal.onrender.com",
-      "com.hmdm.CUSTOMER_TITLE": "HKES Institute",
-      "account": DEFAULT_MANAGED_ACCOUNT
+  let token = 'XTDZEWHFQOBQHMRCYGQE';
+
+  if (androidManagement && ENTERPRISE_NAME) {
+    try {
+      const tokenResponse = await androidManagement.enterprises.enrollmentTokens.create({
+        parent: ENTERPRISE_NAME,
+        requestBody: {
+          policyName: `${ENTERPRISE_NAME}/policies/hkes-strict-kiosk`,
+          duration: '2592000s',
+          oneTimeOnly: false // Multi-use for all 40 devices!
+        }
+      });
+      token = tokenResponse.data.value;
+      console.log('Generated Multi-Use Google Cloud Token:', token);
+    } catch (err) {
+      console.warn('Error generating Google token:', err.message);
     }
-  });
+  }
 
   try {
-    const qrCodeDataUrl = await QRCode.toDataURL(headwindPayload, { margin: 2, width: 350 });
+    const qrCodeDataUrl = await QRCode.toDataURL(token, { margin: 2, width: 350 });
 
     res.json({
       success: true,
-      token: 'HEADWIND_STRICT_KIOSK',
-      mode: 'Headwind MDM Strict Kiosk',
-      enterpriseName: 'HKES Institute Headwind MDM',
-      expirationTimestamp: "Never (Permanent)",
+      token: token,
+      enterpriseName: ENTERPRISE_NAME,
+      expirationTimestamp: "30 Days (Multi-Use for 40 Devices)",
       qrCodeDataUrl: qrCodeDataUrl,
       managedAccount: DEFAULT_MANAGED_ACCOUNT
     });
